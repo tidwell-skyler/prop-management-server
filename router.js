@@ -71,9 +71,25 @@ module.exports = (app) => {
 
 
     app.post('/requests/update-status', useBodyParser, function(req, res) {
-        const id = req.body.id;
-        Request.findOne({ _id: id}, function(err, request) {
+        const _id = req.body._id;
+        Request.findOne({ _id: _id}, function(err, request) {
             if(err) { res.send(err) }
+
+            // const oldStatus = request.status;
+
+            // switch (req.body.status) {
+            //     case 'pending':
+            //         newStatus = 'in-progress';
+            //         break;
+            //     case 'in-progress':
+            //         newStatus = 'complete';
+            //         break;
+            //     case 'complete':
+            //         newStatus = 'pending';
+            //     default:
+            //         break;
+            // }
+
             request.status = req.body.newStatus;
             request.save();
             res.send({
