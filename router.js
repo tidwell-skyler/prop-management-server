@@ -75,26 +75,27 @@ module.exports = (app) => {
         Request.findOne({ _id: _id}, function(err, request) {
             if(err) { res.send(err) }
 
-            // const oldStatus = request.status;
+            const oldStatus = request.status;
+            let newStatus = 'in-progress';
 
-            // switch (req.body.status) {
-            //     case 'pending':
-            //         newStatus = 'in-progress';
-            //         break;
-            //     case 'in-progress':
-            //         newStatus = 'complete';
-            //         break;
-            //     case 'complete':
-            //         newStatus = 'pending';
-            //     default:
-            //         break;
-            // }
+            switch (req.body.status) {
+                case 'pending':
+                    newStatus = 'in-progress';
+                    break;
+                case 'in-progress':
+                    newStatus = 'complete';
+                    break;
+                case 'complete':
+                    newStatus = 'pending';
+                default:
+                    break;
+            }
 
-            request.status = req.body.newStatus;
+            request.status = newStatus;
             request.save();
             res.send({
                 success: true,
-                message: 'saved new status'
+                message: `status changed from ${oldStatus} to ${newStatus}`
             })
         })
     })
